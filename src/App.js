@@ -1,24 +1,60 @@
-import logo from './logo.svg';
+import React, { useState, useRef, useEffect } from 'react';
+
+import { AVRecorder } from '@webav/av-recorder';
+
 import './App.css';
 
+let recorder;
+
+// TODO
+// record after saving file
 function App() {
+  const [recording, setRecording] = useState(false);
+
+  const startRecording = async () => {
+    setRecording(true);
+    try {
+      const stream = await navigator.mediaDevices.getDisplayMedia({
+        video: { mediaSource: 'screen' },
+      });
+      const recodeMS = stream.clone();
+      recorder = new AVRecorder(recodeMS, {
+        width: 1920,
+        height: 1080,
+      });
+      const fileHandle = await window.showSaveFilePicker({
+        suggestedName: `WebAV-${Date.now()}.mp4`,
+      });
+      const writer = await fileHandle.createWritable();
+      await recorder.start();
+      console.log('saving started');
+      recorder.outputStream?.pipeTo(writer).catch(console.error);
+      console.log('is this async');
+      console.log(stream);
+      const handleClose = () => {
+        recorder?.stop();
+        setRecording(false);
+      }
+      stream.oninactive = handleClose;
+    } catch (error) {
+      console.error('Error accessing screen:', error);
+    }
+  };
+
+  const stopRecording = () => {
+    recorder?.stop();
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <section className='home-container'>
+      <h1> The easiest screen recorder you’ll ever use </h1>
+      <div className='home-card'>
+        <h2> Report bugs at blazing fast 🐛</h2>
+        <button onClick={startRecording} disabled={recording}>
+          Start Recording
+        </button>
+      </div>
+    </section>
   );
 }
 
