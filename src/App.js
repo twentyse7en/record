@@ -14,6 +14,12 @@ function App() {
   const startRecording = async () => {
     setRecording(true);
     try {
+      // setup the file to write
+      const fileHandle = await window.showSaveFilePicker({
+        suggestedName: `WebAV-${Date.now()}.mp4`,
+      });
+      const writer = await fileHandle.createWritable();
+
       const stream = await navigator.mediaDevices.getDisplayMedia({
         video: { mediaSource: 'screen' },
       });
@@ -22,14 +28,8 @@ function App() {
         width: 1920,
         height: 1080,
       });
-      const fileHandle = await window.showSaveFilePicker({
-        suggestedName: `WebAV-${Date.now()}.mp4`,
-      });
-      const writer = await fileHandle.createWritable();
       await recorder.start();
-      console.log('saving started');
       recorder.outputStream?.pipeTo(writer).catch(console.error);
-      console.log('is this async');
       console.log(stream);
       const handleClose = () => {
         recorder?.stop();
