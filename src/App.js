@@ -21,7 +21,7 @@ function App() {
       const writer = await fileHandle.createWritable();
 
       const stream = await navigator.mediaDevices.getDisplayMedia({
-        video: { mediaSource: 'screen' },
+        video: { displaySurface: "monitor" },
       });
       const recodeMS = stream.clone();
       recorder = new AVRecorder(recodeMS, {
