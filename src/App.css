@@ -73,3 +73,21 @@ html {
 .home-card button:hover {
   transform: scale(1.1);
 }
+
+.home-card h3 {
+  font-size: 16px;
+  color: #6c6685;
+  margin-top: 10px;
+}
+
+.logo {
+  height: 50px;
+  margin-right: 20px;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}

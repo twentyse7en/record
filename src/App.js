@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 
 import { AVRecorder } from '@webav/av-recorder';
+import recordIcon from './record.svg';
 
 import './App.css';
 
@@ -47,9 +48,15 @@ function App() {
 
   return (
     <section className='home-container'>
-      <h1> The easiest screen recorder you’ll ever use </h1>
+      <header>
+        <img src={recordIcon} className='logo'/>
+        <h1> Screen Recorder </h1>
+      </header>
       <div className='home-card'>
-        <h2> Report bugs at blazing fast 🐛</h2>
+        <div>
+          <h2> Record screen to mp4 </h2>
+          <h3> Privacy first, no data send to server</h3>
+        </div>
         <button onClick={startRecording} disabled={recording}>
           Start Recording
         </button>
